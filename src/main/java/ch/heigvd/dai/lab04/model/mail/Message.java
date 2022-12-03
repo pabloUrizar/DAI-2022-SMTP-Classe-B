@@ -12,11 +12,19 @@ public class Message {
    private String expediteur;
    private String sujet;
    private String corps;
-   // Les destinaitres, les gens en copies et les gens en copies cachées sont stockés dans
+   // Les destinataires, les gens en copies et les gens en copies cachées sont stockés dans
    // des tableaux de chaînes de caractères comme ils peuvent être plusieurs.
    private String[] destinataires = new String[0];
    private String[] copies        = new String[0];
    private String[] copiesMaquees = new String[0];
+
+   public Message(String adresseEmail, String s) {
+      this.expediteur = adresseEmail;
+      this.sujet = s;
+   }
+
+   public Message() {
+   }
 
    /* Getters */
    public String getExpediteur() {
@@ -49,6 +57,10 @@ public class Message {
 
    public void setCorps(String corps) {
       this.corps = corps;
+   }
+
+   public void setDestinataires(String[] destinataires) {
+      this.destinataires = destinataires;
    }
 }
 

@@ -3,7 +3,6 @@ package ch.heigvd.dai.lab04.model.blague;
 import ch.heigvd.dai.lab04.model.mail.Message;
 import ch.heigvd.dai.lab04.model.mail.Personne;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ import java.util.List;
 public class Blague {
    /* Attributs */
    // Victime choisie comme expéditeur
-   private Personne envoyeur;
+   private Personne expediteur;
    // Victimes choisies comme destinataires
    private List<Personne> destinataires;
    private String message;
@@ -27,7 +26,7 @@ public class Blague {
     * @return envoyeur
     */
    public Personne getEnvoyeur() {
-      return envoyeur;
+      return expediteur;
    }
 
    /**
@@ -36,7 +35,7 @@ public class Blague {
     * @param envoyeur Personne qui va envoyer le mail
     */
    public void setEnvoyeur(Personne envoyeur) {
-      this.envoyeur = envoyeur;
+      this.expediteur = envoyeur;
    }
 
    /**
@@ -65,10 +64,11 @@ public class Blague {
 
    public Message genererMessage() {
       Message msg = new Message();
-      msg.setCorps(message + "\r\n\r\n" + "Cordialement,\r\n" + envoyeur.getPrenom() + " " + envoyeur.getNom());
-      // Placer les victimes dans la liste des destinataires depuis
-      // le fichier victimes.UTF8 du paquet config
+      msg.setCorps(message + "\r\n" + "Cordialement,\r\n" + expediteur.getPrenom() + " " + expediteur.getNom());
 
+      String[] destinataires = this.destinataires.stream().map(Personne::getAdresseEmail).toArray(String[]::new);
+      msg.setDestinataires(destinataires);
+      msg.setExpediteur(expediteur.getAdresseEmail());
       return msg;
    }
 

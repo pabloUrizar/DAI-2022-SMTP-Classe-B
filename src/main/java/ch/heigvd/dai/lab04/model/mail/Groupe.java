@@ -18,7 +18,7 @@ public class Groupe {
     * Permet d'ajouter un utilisateur à la liste des utilisateurs
     * @param personne Utilisateur à ajouter
     */
-   public void ajouterUtilisateur(Personne personne) {
+   public void ajouterPersonne(Personne personne) {
       listePersonnes.add(personne);
    }
 
@@ -26,7 +26,11 @@ public class Groupe {
     * Getter de la liste des utilisateurs
     * @return listeUtilisateurs
     */
-   public List<Personne> getUtilisateurs() {
+   public List<Personne> getPersonnes() {
       return new ArrayList<>(listePersonnes);
+   }
+
+   public int taille() {
+      return listePersonnes.size();
    }
 }
