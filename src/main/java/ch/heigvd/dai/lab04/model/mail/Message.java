@@ -20,7 +20,7 @@ public class Message {
 
    public Message(String adresseEmail, String s) {
       this.expediteur = adresseEmail;
-      this.sujet = s;
+      this.sujet      = s;
    }
 
    public Message() {

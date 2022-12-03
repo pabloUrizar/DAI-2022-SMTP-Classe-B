@@ -16,10 +16,10 @@ import java.util.logging.Logger;
  * @author Pablo Urizar
  * @version 1.0
  */
-public class clientSmtp implements IClientSmtp {
+public class ClientSmtp implements IClientSmtp {
 
    // Logger
-   private static final Logger LOG = Logger.getLogger(clientSmtp.class.getName());
+   private static final Logger LOG = Logger.getLogger(ClientSmtp.class.getName());
 
    /* Attributs */
    // Informations du serveur SMTP
@@ -32,7 +32,7 @@ public class clientSmtp implements IClientSmtp {
     * @param adresseServeurSmtp adresse du serveur SMTP
     * @param portServeurSmtp    port du serveur SMTP
     */
-   public clientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
+   public ClientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
       this.adresseServeurSmtp = adresseServeurSmtp;
       this.portServeurSmtp = portServeurSmtp;
    }
