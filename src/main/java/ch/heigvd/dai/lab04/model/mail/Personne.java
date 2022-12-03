@@ -10,6 +10,9 @@ public class Personne {
    /* Attributs */
    private final String adresseEmail;
 
+   private final String nom;
+   private final String prenom;
+
    /**
     * Constructeur de la classe Utilisateur
     *
@@ -22,7 +25,10 @@ public class Personne {
          throw new IllegalArgumentException("L'adresse email n'est pas valide");
 
       this.adresseEmail = adresseEmail;
-
+      // Le prenom sera le premier mot avant le . de l'adresse email
+      this.prenom = adresseEmail.split("\\.")[0];
+      // Le nom sera le premier mot avant le @ de l'adresse email
+      this.nom = adresseEmail.split("@")[0];
    }
 
    /**
@@ -32,6 +38,24 @@ public class Personne {
     */
    public String getAdresseEmail() {
       return adresseEmail;
+   }
+
+   /**
+    * Getter du nom de l'utilisateur
+    *
+    * @return nom de l'utilisateur
+    */
+   public String getNom() {
+      return nom;
+   }
+
+   /**
+    * Getter du prenom de l'utilisateur
+    *
+    * @return prenom de l'utilisateur
+    */
+   public String getPrenom() {
+      return prenom;
    }
 
    /**

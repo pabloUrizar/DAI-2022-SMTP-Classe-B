@@ -22,6 +22,9 @@ public class Message {
    public String getExpediteur() {
       return expediteur;
    }
+   public void setExpediteur(String expediteur) {
+      this.expediteur = expediteur;
+   }
 
    public String getSujet() {
       return sujet;
@@ -42,6 +45,10 @@ public class Message {
 
    public String getCorps() {
       return corps;
+   }
+
+   public void setCorps(String corps) {
+      this.corps = corps;
    }
 }
 
