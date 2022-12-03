@@ -62,6 +62,10 @@ public class Blague {
       this.message = message;
    }
 
+   public void ajouterDestinataire(List<Personne> listeDestinataire) {
+      destinataires.addAll(listeDestinataire);
+   }
+
    public Message genererMessage() {
       Message msg = new Message();
       msg.setCorps(message + "\r\n" + "Cordialement,\r\n" + expediteur.getPrenom() + " " + expediteur.getNom());

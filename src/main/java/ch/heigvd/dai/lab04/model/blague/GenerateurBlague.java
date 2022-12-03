@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Cette classe permet de générer des blagues.
@@ -32,15 +34,20 @@ import java.util.List;
  * @version 1.0
  */
 public class GenerateurBlague {
-   /* Attributs */
+    /* Attributs */
+    // Le gestionnaire de configuration va contenir une liste de victimes et une liste de messages
+    // ainsi que le nombre de groupes à créer, l'adresse du serveur SMTP et le port du serveur SMTP
+    private final GestionnaireConfiguration gestionnaireConfiguration;
+    private static final Logger LOG = Logger.getLogger(GenerateurBlague.class.getName());
 
-   // Groupes de victimes
-   private List<Groupe> listeGroupes;
-   // Liste des messages à envoyer par mail (blagues) pour chaque groupe
-   private List<Message> listeMessages;
-   private final List<String> messages = new ArrayList<>();
-   // Groupe de victimes qui vont recevoir la blague (1 expéditeur et 2 destinataires minimum)
-   private final Groupe groupeVictimes = new Groupe();
+    /**
+     // Groupes de victimes
+     private List<Groupe> listeGroupes;
+     // Liste des messages à envoyer par mail (blagues) pour chaque groupe
+     private List<Message> listeMessages;
+     private final List<String> messages = new ArrayList<>();
+     // Groupe de victimes qui vont recevoir la blague (1 expéditeur et 2 destinataires minimum)
+     private final Groupe groupeVictimes = new Groupe();
 
      static final int NB_GROUPES_MIN = 3;
      static private final String FIN_MSG = "$fin$";
