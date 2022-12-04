@@ -23,8 +23,8 @@ public class Blague {
     private final List<Personne> destinataires = new ArrayList<>();
 
     private final List<String> enCopies = new ArrayList<>();
+    // Contient le Sujet et le corps du message.
     private String message;
-    private String sujet;
 
 
     /**
@@ -78,6 +78,7 @@ public class Blague {
 
     public Message genererMessage() {
         Message msg = new Message();
+
         msg.setCorps(message + "\r\n" + "Cordialement,\r\n" + expediteur.getPseudonyme());
         msg.setListCopies(enCopies);
         String[] destinataires = this.destinataires.stream().map(Personne::getAdresseEmail).toArray(String[]::new);

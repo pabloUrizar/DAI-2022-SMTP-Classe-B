@@ -28,8 +28,6 @@ public class ClientSmtp implements IClientSmtp {
     private final String adresseServeurSmtp;
     private int portServeurSmtp = 25;
     Socket socket;
-    private PrintWriter ecriture;
-    private BufferedReader lecture;
 
     /**
      * Constructeur de la classe clientSmtp
@@ -52,13 +50,16 @@ public class ClientSmtp implements IClientSmtp {
         // Création du socket
         socket = new Socket(adresseServeurSmtp, portServeurSmtp);
         // Création des flux d'entrée et de sortie
-        ecriture = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-        lecture = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        PrintWriter ecriture   = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+        BufferedReader lecture = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+
         // On récupère la réponse du serveur
         String reponse = lecture.readLine();
         LOG.info(reponse);
+
         // On envoie le nom de l'hôte
         ecriture.printf("EHLO localhost\r\n");
+
         // On récupère la réponse du serveur
         reponse = lecture.readLine();
         LOG.info(reponse);
@@ -121,7 +122,6 @@ public class ClientSmtp implements IClientSmtp {
         for (String destinataire : message.getCopiesMasquees()) {
             ecriture.printf("Bcc: %s\r\n", destinataire);
         }
-        //ecriture.printf("Subject: %s\r\n", message.getSujet());
         LOG.info(message.getCorps());
         ecriture.printf("%s\r\n", message.getCorps());
         ecriture.printf(".\r\n");

@@ -117,10 +117,10 @@ public class GenerateurBlague {
 
             blague.setEnCopie(List.of(enCopieString));
 
-            Random rand = new Random();
+            Random rand    = new Random();
             String message = messages.get(rand.nextInt(messages.size()));
-            blague.setMessage(message);
 
+            blague.setMessage(message);
             blagues.add(blague);
         }
         return blagues;
