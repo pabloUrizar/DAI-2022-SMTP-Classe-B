@@ -1,7 +1,7 @@
 package ch.heigvd.dai.lab04.smtp;
 
 import ch.heigvd.dai.lab04.model.mail.Message;
-import jdk.jpackage.internal.Log;
+//import jdk.jpackage.internal.Log;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -43,13 +43,13 @@ public class ClientSmtp implements IClientSmtp {
     */
    @Override
    public void envoyerMessage(Message message) throws IOException {
-      Log.info("Envoi du message via le protocole SMTP");
+      LOG.info("Envoi du message via le protocole SMTP");
 
       try (Socket socket          = new Socket(adresseServeurSmtp, portServeurSmtp);
            BufferedReader lecture = new BufferedReader(new InputStreamReader(socket.getInputStream()));
            PrintWriter ecriture   = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true)) {
 
-         // On attend la réponse du serveur
+         // On attend la réponse du serveur SMTP
          String reponse = lecture.readLine();
          LOG.info(reponse);
 
@@ -128,7 +128,8 @@ public class ClientSmtp implements IClientSmtp {
             }
          }
          */
-         Log.info(message.getCorps());
+
+         LOG.info(message.getCorps());
          ecriture.println(message.getCorps());
          // Terminaison du message
          ecriture.println(".");

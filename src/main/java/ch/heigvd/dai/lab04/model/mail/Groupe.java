@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Groupe {
    // Attributs
-   private List<Personne> listePersonnes;
+   private final List<Personne> listePersonnes = new ArrayList<>();
 
    /**
     * Permet d'ajouter un utilisateur à la liste des utilisateurs

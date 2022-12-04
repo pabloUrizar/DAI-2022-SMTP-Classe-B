@@ -3,6 +3,7 @@ package ch.heigvd.dai.lab04.model.blague;
 import ch.heigvd.dai.lab04.model.mail.Message;
 import ch.heigvd.dai.lab04.model.mail.Personne;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +19,9 @@ public class Blague {
    // Victime choisie comme expéditeur
    private Personne expediteur;
    // Victimes choisies comme destinataires
-   private List<Personne> destinataires;
+   private final List<Personne> destinataires = new ArrayList<>();
    private String message;
+
 
    /**
     * Getter de l'expéditeur

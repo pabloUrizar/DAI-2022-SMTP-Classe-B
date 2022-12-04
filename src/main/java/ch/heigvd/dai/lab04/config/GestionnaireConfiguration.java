@@ -25,9 +25,9 @@ public class GestionnaireConfiguration {
      */
     public GestionnaireConfiguration() throws IOException {
         // Récupération des informations de configuration
-        listePersonnes = recupererAdressesFichier("./config/victimes.utf8");
-        listeMessages  = recupererMessagesFichier("./config/messages.utf8");
-        recupererProprieteFichier("./config/config.properties");
+        listePersonnes = recupererAdressesFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/victimes.utf8");
+        listeMessages  = recupererMessagesFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/messages.utf8");
+        recupererProprieteFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/config.properties");
     }
 
 
@@ -93,11 +93,11 @@ public class GestionnaireConfiguration {
 
         adresseServeurSmtp = properties.getProperty("adresseServeurSmtp");
         portServeurSmtp    = Integer.parseInt(properties.getProperty("portServeurSmtp"));
-        nombreGroupes      = Integer.parseInt(properties.getProperty("nombreGroupes"));
+        nombreGroupes      = Integer.parseInt(properties.getProperty("nombreDeGroupes"));
 
         // On récupère les adresses email éventuelles personnes en copie
         listeEnCopie = new ArrayList<>();
-        String listeEnCopieString = properties.getProperty("listeEnCopie");
+        String listeEnCopieString = properties.getProperty("temoinEnCopie");
 
         // S'il y a effectivement des personnes à mettre en copie, on les ajoute à la liste
         if (listeEnCopieString != null) {
@@ -129,6 +129,15 @@ public class GestionnaireConfiguration {
 
     public List<String> getListeMessages() {
         return listeMessages;
+    }
+
+    // Méthode qui retourne l'adresse email d'une liste de personnes
+    public List<String> getAdressesEmail() {
+        List<String> listeAdressesEmail = new ArrayList<>();
+        for (Personne personne : listePersonnes) {
+            listeAdressesEmail.add(personne.getAdresseEmail());
+        }
+        return listeAdressesEmail;
     }
 
     public List<Personne> getListeEnCopie() {

@@ -1,5 +1,7 @@
 package ch.heigvd.dai.lab04.model.mail;
 
+import java.util.regex.Pattern;
+
 /**
  * Classe Personne qui va permettre de créer une personne qui deviendra une victime (expéditeur ou destinataire)
  *
@@ -20,15 +22,29 @@ public class Personne {
     * @throws IllegalArgumentException si l'adresse email n'est pas valide (pas de @ ou nulle)
     */
    public Personne(String adresseEmail) {
-      // On vérifie que l'adresse email est valide donc sous la forme "nom@domaine.xx"
-      if (!adresseEmail.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-z]{2,6}$"))
-         throw new IllegalArgumentException("L'adresse email n'est pas valide");
+      // On vérifie que l'adresse email est valide donc sous la forme "nom@domaine.xx"$
 
-      this.adresseEmail = adresseEmail;
+      /**
+      if (!adresseEmail.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-z]{2,6}$"))
+        throw new IllegalArgumentException("L'adresse email n'est pas valide");
+       **/
+
+      if (adresseEmail.contains("@")) {
+         this.adresseEmail = adresseEmail;
+
+         String[] test = adresseEmail.split(Pattern.quote("."));
+         this.prenom = test[0];
+         this.nom = test[1];
+      } else {
+         throw new IllegalArgumentException("Invalid mail address");
+      }
+
+      /**
       // Le prenom sera le premier mot avant le . de l'adresse email
       this.prenom = adresseEmail.split("\\.")[0];
       // Le nom sera le premier mot avant le @ de l'adresse email
       this.nom = adresseEmail.split("@")[0];
+       **/
    }
 
    /**

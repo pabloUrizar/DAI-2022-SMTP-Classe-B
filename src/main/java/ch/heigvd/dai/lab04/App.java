@@ -3,12 +3,11 @@ package ch.heigvd.dai.lab04;
 import ch.heigvd.dai.lab04.config.GestionnaireConfiguration;
 import ch.heigvd.dai.lab04.model.blague.Blague;
 import ch.heigvd.dai.lab04.model.blague.GenerateurBlague;
-import ch.heigvd.dai.lab04.model.mail.Groupe;
 import ch.heigvd.dai.lab04.smtp.ClientSmtp;
-import sun.net.smtp.SmtpClient;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Application principale du générateur de blagues.
@@ -63,10 +62,17 @@ public class App {
         // Génération des blagues
         List<Blague> blagues = generateurBlague.genererBlagues();
 
+        // Create logger
+        Logger logger = Logger.getLogger(App.class.getName());
+
+
         // Envoie des blagues à la liste de groupes de victimes
         for(Blague blague : blagues){
+            logger.warning(blague.getEnvoyeur().getAdresseEmail() + " " + blague.getDestinataires().get(0).getAdresseEmail());
             clientSmtp.envoyerMessage(blague.genererMessage());
         }
+
+
 
         System.out.println("Fin de l'envoi des messages");
 

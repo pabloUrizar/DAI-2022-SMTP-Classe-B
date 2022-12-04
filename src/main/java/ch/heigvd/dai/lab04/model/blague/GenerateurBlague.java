@@ -83,6 +83,7 @@ public class GenerateurBlague {
             groupeCible = groupes.get(tour);
             tour = (tour + 1) % groupes.size();
             Personne victime = new Personne(victimes.remove(0));
+            LOG.warning(victime.getAdresseEmail());
             groupeCible.ajouterPersonne(victime);
         }
         return groupes;
@@ -94,15 +95,18 @@ public class GenerateurBlague {
         List<Blague> blagues = new ArrayList<>();
         List<String> messages = gestionnaireConfiguration.getListeMessages();
 
-        int numberVictims = gestionnaireConfiguration.getListeMessages().size();
+        int numberVictims = gestionnaireConfiguration.getPersonnes().size();
         int numberGroups = gestionnaireConfiguration.getNombreGroupes();
+
+        LOG.warning(String.valueOf(numberGroups));
+        LOG.warning(String.valueOf(numberVictims));
 
         if(numberVictims / numberGroups < 3){
             numberGroups = numberVictims / 3;
             LOG.warning("There are not enough people to generate a prank");
         }
 
-        List<Groupe> groupes = genererGroupes(gestionnaireConfiguration.getListeMessages(), numberGroups);
+        List<Groupe> groupes = genererGroupes(gestionnaireConfiguration.getAdressesEmail(), numberGroups);
         for(Groupe groupe : groupes){
             Blague blague = new Blague();
 
