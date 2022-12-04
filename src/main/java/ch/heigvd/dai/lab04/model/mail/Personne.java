@@ -24,11 +24,10 @@ public class Personne {
    public Personne(String adresseEmail) {
       // On vérifie que l'adresse email est valide donc sous la forme "nom@domaine.xx"$
 
-      /**
       if (!adresseEmail.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-z]{2,6}$"))
         throw new IllegalArgumentException("L'adresse email n'est pas valide");
-       **/
 
+      /**
       if (adresseEmail.contains("@")) {
          this.adresseEmail = adresseEmail;
 
@@ -38,13 +37,12 @@ public class Personne {
       } else {
          throw new IllegalArgumentException("Invalid mail address");
       }
-
-      /**
+       **/
+      this.adresseEmail = adresseEmail;
       // Le prenom sera le premier mot avant le . de l'adresse email
       this.prenom = adresseEmail.split("\\.")[0];
       // Le nom sera le premier mot avant le @ de l'adresse email
       this.nom = adresseEmail.split("@")[0];
-       **/
    }
 
    /**
