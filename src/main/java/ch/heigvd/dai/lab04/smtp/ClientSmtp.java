@@ -6,7 +6,9 @@ import ch.heigvd.dai.lab04.model.mail.Message;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
+
 
 /**
  * Classe clientSmtp qui permet d'envoyer des mails à une liste de destinataires
@@ -18,129 +20,124 @@ import java.util.logging.Logger;
  */
 public class ClientSmtp implements IClientSmtp {
 
-   // Logger
-   private static final Logger LOG = Logger.getLogger(ClientSmtp.class.getName());
+    // Logger
+    private static final Logger LOG = Logger.getLogger(ClientSmtp.class.getName());
 
-   /* Attributs */
-   // Informations du serveur SMTP
-   private String adresseServeurSmtp;
-   private int portServeurSmtp = 25;
+    /* Attributs */
+    // Informations du serveur SMTP
+    private final String adresseServeurSmtp;
+    private int portServeurSmtp = 25;
+    Socket socket;
+    private PrintWriter ecriture;
+    private BufferedReader lecture;
 
-   /**
-    * Constructeur de la classe clientSmtp
-    *
-    * @param adresseServeurSmtp adresse du serveur SMTP
-    * @param portServeurSmtp    port du serveur SMTP
-    */
-   public ClientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
-      this.adresseServeurSmtp = adresseServeurSmtp;
-      this.portServeurSmtp = portServeurSmtp;
-   }
+    /**
+     * Constructeur de la classe clientSmtp
+     *
+     * @param adresseServeurSmtp adresse du serveur SMTP
+     * @param portServeurSmtp    port du serveur SMTP
+     */
+    public ClientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
+        this.adresseServeurSmtp = adresseServeurSmtp;
+        this.portServeurSmtp = portServeurSmtp;
+    }
 
-   /**
-    * @param message message à envoyer
-    * @throws IOException
-    */
-   @Override
-   public void envoyerMessage(Message message) throws IOException {
-      LOG.info("Envoi du message via le protocole SMTP");
+    /**
+     * @param message message à envoyer
+     * @throws IOException
+     */
+    @Override
+    public void envoyerMessage(Message message) throws IOException {
+        LOG.info("Envoi du message via le protocole SMTP");
+        // Création de la socket
+        socket = new Socket(adresseServeurSmtp, portServeurSmtp);
+        // Création des flux d'entrée et de sortie
+        ecriture = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+        lecture = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        // On récupère la réponse du serveur
+        String reponse = lecture.readLine();
+        LOG.info(reponse);
+        // On envoie le nom de l'hôte
+        ecriture.printf("EHLO localhost\r\n");
+        // On récupère la réponse du serveur
+        reponse = lecture.readLine();
+        LOG.info(reponse);
 
-      try (Socket socket          = new Socket(adresseServeurSmtp, portServeurSmtp);
-           BufferedReader lecture = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-           PrintWriter ecriture   = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true)) {
+        if (!reponse.startsWith("250")) {
+            throw new IOException("Erreur lors de l'envoi du nom de l'hôte");
+        }
 
-         // On attend la réponse du serveur SMTP
-         String reponse = lecture.readLine();
-         LOG.info(reponse);
-
-         // On envoie le nom de l'hôte
-         ecriture.println("EHLO " + InetAddress.getLocalHost().getHostName());
-         reponse = lecture.readLine();
-         LOG.info(reponse);
-
-         // Si la ligne ne commence par 250, c'est que le serveur n'a pas accepté la commande
-         if (!reponse.startsWith("250")) {
-            throw new IOException("Erreur smtp : " + reponse);
-         }
-         // Tant que la ligne commence par 250, on continue à lire
-         while (reponse.startsWith("250")) {
+        while(reponse.startsWith("250-")) {
             reponse = lecture.readLine();
             LOG.info(reponse);
-         }
+        }
 
-         // On envoie l'expéditeur
-         ecriture.println("MAIL FROM: " + message.getExpediteur());
-         reponse = lecture.readLine();
-         LOG.info(reponse);
+        // On envoie l'expéditeur
+        ecriture.printf("MAIL FROM: %s\r\n", message.getExpediteur());
+        // On récupère la réponse du serveur
+        reponse = lecture.readLine();
+        LOG.info(reponse);
 
-         // On envoie les destinataires
-         for (String to : message.getDestinataires()) {
-            ecriture.println("RCPT TO: " + to);
+        for (String destinataire : message.getDestinataires()) {
+            // On envoie le destinataire
+            ecriture.printf("RCPT TO: %s\r\n", destinataire);
+            // On récupère la réponse du serveur
             reponse = lecture.readLine();
             LOG.info(reponse);
-         }
+        }
 
-         // On envoie les gens en copie
-         for (String cc : message.getCopies()) {
-            ecriture.println("RCPT TO: " + cc);
+        for (String destinataire : message.getCopies()) {
+            // On envoie le destinataire
+            ecriture.printf("RCPT TO: %s\r\n", destinataire);
+            // On récupère la réponse du serveur
             reponse = lecture.readLine();
             LOG.info(reponse);
-         }
+        }
 
-         // On envoie les gens en copie cachée
-         for (String bcc : message.getCopiesMasquees()) {
-            ecriture.println("RCPT TO: " + bcc);
+        for (String destinataire : message.getCopiesMasquees()) {
+            // On envoie le destinataire
+            ecriture.printf("RCPT TO: %s\r\n", destinataire);
+            // On récupère la réponse du serveur
             reponse = lecture.readLine();
             LOG.info(reponse);
-         }
+        }
 
-         // On envoie le corps du message
-         ecriture.println("DATA");
-         reponse = lecture.readLine();
-         LOG.info(reponse);
+        // On envoie la commande DATA
+        ecriture.printf("DATA\r\n");
+        // On récupère la réponse du serveur
+        reponse = lecture.readLine();
+        LOG.info(reponse);
 
-         // On envoie l'expéditeur
-         ecriture.println("From: " + message.getExpediteur());
-         // On envoie aux destinataires
-         ecriture.println("To: " + message.getDestinataires()[0]);
-         // S'il y en a plus d'un, on les sépare par des virgules
-         if (message.getDestinataires().length > 1) {
-            for (int i = 1; i < message.getDestinataires().length; i++) {
-               ecriture.println(", " + message.getDestinataires()[i]);
-            }
-         }
-         // On envoie aux gens en copie
-         ecriture.println("Cc: " + message.getCopies()[0]);
-         // S'il y en a plus d'un, on les sépare par des virgules
-         if (message.getCopies().length > 1) {
-            for (int i = 1; i < message.getCopies().length; i++) {
-               ecriture.println(", " + message.getCopies()[i]);
-            }
-         }
-         // TODO : voir si il faut faire ca
-         /*
-         // On envoie aux gens en copie cachée
-         ecriture.println("Bcc: " + message.getCopiesMasquees()[0]);
-         // S'il y en a plus d'un, on les sépare par des virgules
-         if (message.getCopiesMasquees().length > 1) {
-            for (int i = 1; i < message.getCopiesMasquees().length; i++) {
-               ecriture.println(", " + message.getCopiesMasquees()[i]);
-            }
-         }
-         */
+        // On envoie le message
+        ecriture.printf("From: %s\r\n", message.getExpediteur());
+        for (String destinataire : message.getDestinataires()) {
+            ecriture.printf("To: %s\r\n", destinataire);
+        }
+        for (String destinataire : message.getCopies()) {
+            ecriture.printf("Cc: %s\r\n", destinataire);
+        }
+        for (String destinataire : message.getCopiesMasquees()) {
+            ecriture.printf("Bcc: %s\r\n", destinataire);
+        }
+        ecriture.printf("Subject: %s\r\n", message.getSujet());
+        ecriture.printf("%s\r\n", message.getCorps());
+        ecriture.printf(".\r\n");
+        // On récupère la réponse du serveur
+        reponse = lecture.readLine();
+        LOG.info(reponse);
 
-         LOG.info(message.getCorps());
-         ecriture.println(message.getCorps());
-         // Terminaison du message
-         ecriture.println(".");
-         reponse = lecture.readLine();
-         LOG.info(reponse);
-         // Fin de la connexion
-         ecriture.println("QUIT");
-         reponse = lecture.readLine();
-         LOG.info(reponse);
+        // On envoie la commande QUIT
+        ecriture.printf("QUIT\r\n");
+        // On récupère la réponse du serveur
+        reponse = lecture.readLine();
+        LOG.info(reponse);
 
-         // La fermeture des flux et du socket se fait automatiquement grâce au try-with-resources
-      }
-   }
+        // On ferme la socket et les flux
+        socket.close();
+        ecriture.close();
+        lecture.close();
+
+        LOG.info("Message envoyé");
+
+    }
 }
