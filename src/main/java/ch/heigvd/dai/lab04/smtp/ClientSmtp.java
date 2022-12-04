@@ -116,7 +116,7 @@ public class ClientSmtp implements IClientSmtp {
         for (String destinataire : message.getCopies()) {
             ecriture.printf("Cc: %s\r\n", destinataire);
         }
-        ecriture.printf("Cc: %s\r\n", "gregoire.guyot@heig-vd.ch");
+
 
         for (String destinataire : message.getCopiesMasquees()) {
             ecriture.printf("Bcc: %s\r\n", destinataire);
@@ -135,7 +135,7 @@ public class ClientSmtp implements IClientSmtp {
         reponse = lecture.readLine();
         LOG.info(reponse);
 
-        // On ferme la socket et les flux
+        // On ferme le socket et les flux
         socket.close();
         ecriture.close();
         lecture.close();

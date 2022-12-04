@@ -1,5 +1,7 @@
 package ch.heigvd.dai.lab04.model.mail;
 
+import java.util.List;
+
 /**
  * Classe Message contenant toutes les informations des mails envoyés sous forme de chaîne de caractères
  *
@@ -50,8 +52,8 @@ public class Message {
       return copiesMaquees;
    }
 
-   public void setListCopies(String[] copies) {
-      this.copies = copies.clone();
+   public void setListCopies(List<String> copies) {
+      this.copies = copies.toArray(new String[0]);
    }
 
 
