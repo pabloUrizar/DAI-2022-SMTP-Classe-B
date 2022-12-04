@@ -4,7 +4,6 @@ import ch.heigvd.dai.lab04.model.mail.Message;
 //import jdk.jpackage.internal.Log;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
@@ -26,7 +25,7 @@ public class ClientSmtp implements IClientSmtp {
     /* Attributs */
     // Informations du serveur SMTP
     private final String adresseServeurSmtp;
-    private int portServeurSmtp = 25;
+    private final int portServeurSmtp;
     Socket socket;
 
     /**
@@ -37,12 +36,12 @@ public class ClientSmtp implements IClientSmtp {
      */
     public ClientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
         this.adresseServeurSmtp = adresseServeurSmtp;
-        this.portServeurSmtp = portServeurSmtp;
+        this.portServeurSmtp    = portServeurSmtp;
     }
 
     /**
      * @param message message à envoyer
-     * @throws IOException
+     * @throws IOException exception levée en cas d'erreur d'envoi du message au serveur SMTP ou de lecture de la réponse
      */
     @Override
     public void envoyerMessage(Message message) throws IOException {

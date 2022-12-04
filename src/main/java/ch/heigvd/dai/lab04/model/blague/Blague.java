@@ -55,15 +55,6 @@ public class Blague {
     }
 
     /**
-     * Getter du message de la blague
-     *
-     * @return message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
      * Setter du message de la blague
      *
      * @param message Message de la blague
