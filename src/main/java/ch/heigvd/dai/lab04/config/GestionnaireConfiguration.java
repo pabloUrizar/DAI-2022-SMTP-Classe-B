@@ -24,10 +24,10 @@ public class GestionnaireConfiguration {
      * Va permettre de récupérer les informations de configuration depuis le fichier de configuration
      */
     public GestionnaireConfiguration() throws IOException {
-        // Récupération des informations de configuration
-        listePersonnes = recupererAdressesFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/victimes.utf8");
-        listeMessages  = recupererMessagesFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/messages.utf8");
-        recupererProprieteFichier("/Users/pablo/Documents/BA3/DAI/DAI-2022-SMTP-Classe-B/src/main/java/ch/heigvd/dai/lab04/config/config.properties");
+        // Récupération des informations de configuration depuis les fichiers respectifs
+        listePersonnes = recupererAdressesFichier("../src/main/java/ch/heigvd/dai/lab04/config/victimes.utf8");
+        listeMessages  = recupererMessagesFichier("../src/main/java/ch/heigvd/dai/lab04/config/messages.utf8");
+        recupererProprieteFichier("../src/main/java/ch/heigvd/dai/lab04/config/config.properties");
     }
 
 

@@ -49,7 +49,7 @@ public class ClientSmtp implements IClientSmtp {
     @Override
     public void envoyerMessage(Message message) throws IOException {
         LOG.info("Envoi du message via le protocole SMTP");
-        // Création de la socket
+        // Création du socket
         socket = new Socket(adresseServeurSmtp, portServeurSmtp);
         // Création des flux d'entrée et de sortie
         ecriture = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);

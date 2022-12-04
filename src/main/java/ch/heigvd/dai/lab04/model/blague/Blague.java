@@ -20,7 +20,10 @@ public class Blague {
    private Personne expediteur;
    // Victimes choisies comme destinataires
    private final List<Personne> destinataires = new ArrayList<>();
+
+   private final List<Personne> enCopies = new ArrayList<>();
    private String message;
+   private String sujet;
 
 
    /**
@@ -71,13 +74,13 @@ public class Blague {
    public Message genererMessage() {
       Message msg = new Message();
       msg.setCorps(message + "\r\n" + "Cordialement,\r\n" + expediteur.getPrenom() + " " + expediteur.getNom());
-
+      msg.setSujet(sujet);
+      msg.setListCopies(enCopies.stream().map(Personne::getAdresseEmail).toArray(String[]::new));
       String[] destinataires = this.destinataires.stream().map(Personne::getAdresseEmail).toArray(String[]::new);
       msg.setDestinataires(destinataires);
 
       msg.setExpediteur(expediteur.getAdresseEmail());
       return msg;
    }
-
 
 }

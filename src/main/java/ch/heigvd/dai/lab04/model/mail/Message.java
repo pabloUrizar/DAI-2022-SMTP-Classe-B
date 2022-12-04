@@ -51,7 +51,7 @@ public class Message {
    }
 
    public void setListCopies(String[] copies) {
-      this.copies = copies;
+      this.copies = copies.clone();
    }
 
 
@@ -64,7 +64,11 @@ public class Message {
    }
 
    public void setDestinataires(String[] destinataires) {
-      this.destinataires = destinataires;
+      this.destinataires = destinataires.clone();
+   }
+
+   public void setSujet(String sujet) {
+      this.sujet = sujet;
    }
 }
 
