@@ -74,6 +74,7 @@ public class Blague {
 
       String[] destinataires = this.destinataires.stream().map(Personne::getAdresseEmail).toArray(String[]::new);
       msg.setDestinataires(destinataires);
+
       msg.setExpediteur(expediteur.getAdresseEmail());
       return msg;
    }

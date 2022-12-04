@@ -116,10 +116,13 @@ public class ClientSmtp implements IClientSmtp {
         for (String destinataire : message.getCopies()) {
             ecriture.printf("Cc: %s\r\n", destinataire);
         }
+        ecriture.printf("Cc: %s\r\n", "gregoire.guyot@heig-vd.ch");
+
         for (String destinataire : message.getCopiesMasquees()) {
             ecriture.printf("Bcc: %s\r\n", destinataire);
         }
-        ecriture.printf("Subject: %s\r\n", message.getSujet());
+        //ecriture.printf("Subject: %s\r\n", message.getSujet());
+        LOG.info(message.getCorps());
         ecriture.printf("%s\r\n", message.getCorps());
         ecriture.printf(".\r\n");
         // On récupère la réponse du serveur

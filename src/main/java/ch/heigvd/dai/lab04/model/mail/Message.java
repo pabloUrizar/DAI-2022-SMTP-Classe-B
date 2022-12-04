@@ -50,6 +50,10 @@ public class Message {
       return copiesMaquees;
    }
 
+   public void setListCopies(String[] copies) {
+      this.copies = copies;
+   }
+
 
    public String getCorps() {
       return corps;
