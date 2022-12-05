@@ -50,9 +50,9 @@ public class GenerateurBlague {
         this.gestionnaireConfiguration = gestionnaireConfiguration;
     }
 
-    public List<Groupe> genererGroupes(List<String> victimsMail, int nombreGroupes) {
+    public List<Groupe> genererGroupes(List<String> mailsVictimes, int nombreGroupes) {
 
-        List<String> victimes = new ArrayList<>(victimsMail);
+        List<String> victimes = new ArrayList<>(mailsVictimes);
 
         Collections.shuffle(victimes);
         List<Groupe> groupes = new ArrayList<>();
