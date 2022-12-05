@@ -21,12 +21,14 @@ Pour lancer MockMock dans un conteneur Docker une fois Docker est installé et l
 1. S'il s'agît de la première fois que vous exécutez le serveur MockMock sur docker, il faut lancer le script **mockmock/build-image.sh** qui va construire l'image docker.
 2. Pour démarrer l'image et lancer le serveur exécuter le script **mockmock/run-container.sh**
 3. Une fois les tests effectués, on peut arrêter l'instance de docker contenant mockmock en lançant la commande:
-`docker stop mockmock`
+`docker stop <nom_container>`
+
+Pour avoir le nom du container il faut lancer la commande `docker ps`et le nom se trouve sous la colonne NAMES.
 
 Pour vérifier le bon fonctionnement, il suffit d'aller sur:
 [http://localhost:8282](http://localhost:8282 "http://localhost:8282")
 
-Après avoir lancé **mockmock/build.sh** on peut également spécifier le port de notre choix:
+Après avoir lancé **mockmock/build-image.sh** on peut également spécifier le port de notre choix:
 `docker run -d --rm --name mockmock -p 25:25 -p <port>:<port> mockmock`
 
 ### Instructions pour configurer et lancer le projet
