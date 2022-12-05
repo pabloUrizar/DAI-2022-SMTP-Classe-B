@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
+import java.nio.charset.StandardCharsets;
 public class GestionnaireConfiguration {
 
     private String adresseServeurSmtp;
@@ -42,7 +42,7 @@ public class GestionnaireConfiguration {
     private List<Personne> recupererAdressesFichier(String nomFichier) {
         List<Personne> listePersonnes = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(nomFichier));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(nomFichier, StandardCharsets.UTF_8));
             String ligne;
             while ((ligne = bufferedReader.readLine()) != null) {
                 listePersonnes.add(new Personne(ligne));
@@ -63,7 +63,7 @@ public class GestionnaireConfiguration {
         // Un message se termine par la ligne $fin$
         StringBuilder message = new StringBuilder();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(nomFichier));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(nomFichier, StandardCharsets.UTF_8));
             String ligne;
             while ((ligne = bufferedReader.readLine()) != null) {
                 if (ligne.equals("$fin$")) {

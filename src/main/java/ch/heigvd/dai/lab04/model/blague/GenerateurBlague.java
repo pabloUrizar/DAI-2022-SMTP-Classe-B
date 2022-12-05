@@ -4,7 +4,6 @@ import ch.heigvd.dai.lab04.config.GestionnaireConfiguration;
 import ch.heigvd.dai.lab04.model.mail.Groupe;
 import ch.heigvd.dai.lab04.model.mail.Personne;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,19 +40,6 @@ public class GenerateurBlague {
     private static final Logger LOG = Logger.getLogger(GenerateurBlague.class.getName());
 
     /**
-     // Groupes de victimes
-     private List<Groupe> listeGroupes;
-     // Liste des messages à envoyer par mail (blagues) pour chaque groupe
-     private List<Message> listeMessages;
-     private final List<String> messages = new ArrayList<>();
-     // Groupe de victimes qui vont recevoir la blague (1 expéditeur et 2 destinataires minimum)
-     private final Groupe groupeVictimes = new Groupe();
-
-     static final int NB_GROUPES_MIN = 3;
-     static private final String FIN_MSG = "$fin$";
-     **/
-
-    /**
      * Constructeur de la classe GenerateurBlague
      *
      * @param gestionnaireConfiguration qui va permettre de récupérer les informations de configuration
@@ -83,7 +69,7 @@ public class GenerateurBlague {
             groupeCible = groupes.get(tour);
             tour = (tour + 1) % groupes.size();
             Personne victime = new Personne(victimes.remove(0));
-            LOG.warning(victime.getAdresseEmail());
+            LOG.info(victime.getAdresseEmail());
             groupeCible.ajouterPersonne(victime);
         }
         return groupes;
@@ -92,36 +78,49 @@ public class GenerateurBlague {
 
     public List<Blague> genererBlagues(){
 
-        List<Blague> blagues = new ArrayList<>();
+        List<Blague> blagues  = new ArrayList<>();
         List<String> messages = gestionnaireConfiguration.getListeMessages();
 
-        int numberVictims = gestionnaireConfiguration.getPersonnes().size();
-        int numberGroups = gestionnaireConfiguration.getNombreGroupes();
-
-        LOG.warning(String.valueOf(numberGroups));
-        LOG.warning(String.valueOf(numberVictims));
-
-        if(numberVictims / numberGroups < 3){
-            numberGroups = numberVictims / 3;
-            LOG.warning("There are not enough people to generate a prank");
+        int nombreDeVictimes = gestionnaireConfiguration.getPersonnes().size();
+        int nombreDeGroupes  = gestionnaireConfiguration.getNombreGroupes();
+        // On place le ou les gens en copie dans une liste de personnes
+        List<Personne> enCopie = gestionnaireConfiguration.getListeEnCopie();
+        // On place l'adresse des gens en copie dans un tableau de String
+        String[] enCopieString = new String[enCopie.size()];
+        for (int i = 0; i < enCopie.size(); i++) {
+            enCopieString[i] = enCopie.get(i).getAdresseEmail();
         }
 
-        List<Groupe> groupes = genererGroupes(gestionnaireConfiguration.getAdressesEmail(), numberGroups);
+        for (Personne personne : enCopie) {
+            LOG.info("Cc : " + personne.getAdresseEmail());
+        }
+
+        LOG.info(String.valueOf(nombreDeGroupes));
+        LOG.info(String.valueOf(nombreDeVictimes));
+
+        if(nombreDeVictimes / nombreDeGroupes < 3){
+            nombreDeGroupes = nombreDeVictimes / 3;
+            LOG.warning("Pas assez de victimes pour former les groupes demandés, diminution du nombre de groupes");
+        }
+
+        List<Groupe> groupes = genererGroupes(gestionnaireConfiguration.getAdressesEmail(), nombreDeGroupes);
         for(Groupe groupe : groupes){
             Blague blague = new Blague();
 
             List<Personne> victimes = groupe.getPersonnes();
 
-            // Shuffle to make the sender random
+            // On choisit une victime au hasard pour être l'expéditeur de la blague
             Collections.shuffle(victimes);
             Personne expediteur = victimes.remove(0);
-            blague.setEnvoyeur(expediteur);
+            blague.setExpediteur(expediteur);
             blague.ajouterDestinataire(victimes);
 
-            Random rand = new Random();
-            String message = messages.get(rand.nextInt(messages.size()));
-            blague.setMessage(message);
+            blague.setEnCopie(List.of(enCopieString));
 
+            Random rand    = new Random();
+            String message = messages.get(rand.nextInt(messages.size()));
+
+            blague.setMessage(message);
             blagues.add(blague);
         }
         return blagues;

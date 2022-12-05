@@ -20,61 +20,26 @@ import java.util.logging.Logger;
  */
 public class App {
     public static void main(String[] args) throws IOException {
-        /**
 
-        // Recuperation des propriétés dans le fichier config.properties
-        final String fichierVictimes = "src/main/java/ch/heigvd/dai/lab04/config/victimes.UTF8";
-        final String fichierMessages = "src/main/java/ch/heigvd/dai/lab04/config/messages.UTF8";
-        final String fichierConfig   = "src/main/java/ch/heigvd/dai/lab04/config/config.properties";
-        Properties properties = null;
-
-
-        try (InputStream input = Files.newInputStream(Paths.get(fichierConfig))) {
-            properties = new Properties();
-            properties.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        assert properties != null;
-        final String adresseServeurSmtp = properties.getProperty("adresseServeurSmtp");
-        final int portServeurSmtp = Integer.parseInt(properties.getProperty("portServeurSmtp"));
-        final int nbGroupes = Integer.parseInt(properties.getProperty("nombreDeGroupes"));
-
-        // Envoi des messages avec la méthode envoyerMessage de la classe clientSmtp
-        clientSmtp client = new clientSmtp(adresseServeurSmtp, portServeurSmtp);
-        GenerateurBlague generateur = new GenerateurBlague();
-        // Utiliser le client smtp et le générateur de blagues pour envoyer les messages
-
-        // ...
-
-        System.out.println("Fin de l'envoi des messages");
-         **/
-
-        // Création du client SMTP en utilisant le générateur de blague et le gestionnaire de configuration qui
-        // contient les informations de connexion au serveur SMTP.
-
-        GestionnaireConfiguration gestionnaireConfiguration = new GestionnaireConfiguration();
-        GenerateurBlague generateurBlague = new GenerateurBlague(gestionnaireConfiguration);
-        ClientSmtp clientSmtp             = new ClientSmtp(gestionnaireConfiguration.getAdresseServeurSmtp(),
-                                                           gestionnaireConfiguration.getPortServeurSmtp());
-
-        // Génération des blagues
-        List<Blague> blagues = generateurBlague.genererBlagues();
-
-        // Create logger
         Logger logger = Logger.getLogger(App.class.getName());
 
+        // On récupère les configurations
+        GestionnaireConfiguration gestionnaireConfiguration = new GestionnaireConfiguration();
+        GenerateurBlague generateurBlague                   = new GenerateurBlague(gestionnaireConfiguration);
+
+        // Création d'un client SMTP
+        ClientSmtp clientSmtp = new ClientSmtp(gestionnaireConfiguration.getAdresseServeurSmtp(),
+                                               gestionnaireConfiguration.getPortServeurSmtp());
+
+        // On génère les blagues et le groupes de victimes à partir des configurations
+        List<Blague> blagues = generateurBlague.genererBlagues();
 
         // Envoie des blagues à la liste de groupes de victimes
         for(Blague blague : blagues){
-            logger.warning(blague.getEnvoyeur().getAdresseEmail() + " " + blague.getDestinataires().get(0).getAdresseEmail());
+            logger.info(blague.getEnvoyeur().getAdresseEmail() + " " + blague.getDestinataires().get(0).getAdresseEmail());
             clientSmtp.envoyerMessage(blague.genererMessage());
         }
 
-
-
-        System.out.println("Fin de l'envoi des messages");
-
+        System.out.println("Fin de l'envoi des mails");
     }
 }

@@ -1,5 +1,7 @@
 package ch.heigvd.dai.lab04.model.mail;
 
+import java.util.List;
+
 /**
  * Classe Message contenant toutes les informations des mails envoyés sous forme de chaîne de caractères
  *
@@ -10,21 +12,14 @@ package ch.heigvd.dai.lab04.model.mail;
 public class Message {
    /* Attributs */
    private String expediteur;
-   private String sujet;
    private String corps;
    // Les destinataires, les gens en copies et les gens en copies cachées sont stockés dans
    // des tableaux de chaînes de caractères comme ils peuvent être plusieurs.
    private String[] destinataires = new String[0];
    private String[] copies        = new String[0];
+
+   // Pas encore implémentée
    private String[] copiesMaquees = new String[0];
-
-   public Message(String adresseEmail, String s) {
-      this.expediteur = adresseEmail;
-      this.sujet      = s;
-   }
-
-   public Message() {
-   }
 
    /* Getters */
    public String getExpediteur() {
@@ -32,10 +27,6 @@ public class Message {
    }
    public void setExpediteur(String expediteur) {
       this.expediteur = expediteur;
-   }
-
-   public String getSujet() {
-      return sujet;
    }
 
    public String[] getDestinataires() {
@@ -50,8 +41,8 @@ public class Message {
       return copiesMaquees;
    }
 
-   public void setListCopies(String[] copies) {
-      this.copies = copies.clone();
+   public void setListCopies(List<String> copies) {
+      this.copies = copies.toArray(new String[0]);
    }
 
 
@@ -67,8 +58,5 @@ public class Message {
       this.destinataires = destinataires.clone();
    }
 
-   public void setSujet(String sujet) {
-      this.sujet = sujet;
-   }
 }
 

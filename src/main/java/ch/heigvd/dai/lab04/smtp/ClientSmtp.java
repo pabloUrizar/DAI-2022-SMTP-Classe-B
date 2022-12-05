@@ -4,7 +4,6 @@ import ch.heigvd.dai.lab04.model.mail.Message;
 //import jdk.jpackage.internal.Log;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
@@ -26,10 +25,8 @@ public class ClientSmtp implements IClientSmtp {
     /* Attributs */
     // Informations du serveur SMTP
     private final String adresseServeurSmtp;
-    private int portServeurSmtp = 25;
+    private final int portServeurSmtp;
     Socket socket;
-    private PrintWriter ecriture;
-    private BufferedReader lecture;
 
     /**
      * Constructeur de la classe clientSmtp
@@ -39,12 +36,12 @@ public class ClientSmtp implements IClientSmtp {
      */
     public ClientSmtp(String adresseServeurSmtp, int portServeurSmtp) {
         this.adresseServeurSmtp = adresseServeurSmtp;
-        this.portServeurSmtp = portServeurSmtp;
+        this.portServeurSmtp    = portServeurSmtp;
     }
 
     /**
      * @param message message à envoyer
-     * @throws IOException
+     * @throws IOException exception levée en cas d'erreur d'envoi du message au serveur SMTP ou de lecture de la réponse
      */
     @Override
     public void envoyerMessage(Message message) throws IOException {
@@ -52,13 +49,16 @@ public class ClientSmtp implements IClientSmtp {
         // Création du socket
         socket = new Socket(adresseServeurSmtp, portServeurSmtp);
         // Création des flux d'entrée et de sortie
-        ecriture = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-        lecture = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+        PrintWriter ecriture   = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+        BufferedReader lecture = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+
         // On récupère la réponse du serveur
         String reponse = lecture.readLine();
         LOG.info(reponse);
+
         // On envoie le nom de l'hôte
         ecriture.printf("EHLO localhost\r\n");
+
         // On récupère la réponse du serveur
         reponse = lecture.readLine();
         LOG.info(reponse);
@@ -116,12 +116,11 @@ public class ClientSmtp implements IClientSmtp {
         for (String destinataire : message.getCopies()) {
             ecriture.printf("Cc: %s\r\n", destinataire);
         }
-        ecriture.printf("Cc: %s\r\n", "gregoire.guyot@heig-vd.ch");
+
 
         for (String destinataire : message.getCopiesMasquees()) {
             ecriture.printf("Bcc: %s\r\n", destinataire);
         }
-        //ecriture.printf("Subject: %s\r\n", message.getSujet());
         LOG.info(message.getCorps());
         ecriture.printf("%s\r\n", message.getCorps());
         ecriture.printf(".\r\n");
@@ -135,7 +134,7 @@ public class ClientSmtp implements IClientSmtp {
         reponse = lecture.readLine();
         LOG.info(reponse);
 
-        // On ferme la socket et les flux
+        // On ferme le socket et les flux
         socket.close();
         ecriture.close();
         lecture.close();

@@ -30,7 +30,4 @@ public class Groupe {
       return new ArrayList<>(listePersonnes);
    }
 
-   public int taille() {
-      return listePersonnes.size();
-   }
 }
