@@ -49,5 +49,5 @@ Le paquet blague contient deux classes, GenerateurBlague qui va utiliser les con
 Le paquet smtp contient un simple clientSmtp qui va pouvoir envoyer des messages à un serveur précis sur une port précis.
 Toutes ces classes sont liées dans l'application princpale App qui va dans l'ordre, récuperer les configuration, générer les groupes et les listes de blagues puis les envoyer.
 Voila le diagramme de classe du projet qui contient les classes et leurs attributs et méthodes principales.
-![UML.png](imageRapport/UML.png)
+![UML.PNG](imageRapport%UML.PNG)
 #### Références
