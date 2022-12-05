@@ -43,5 +43,11 @@ Ceci va générer un fichier.jar que nous pouvons ensuite lancer avec:
 `java -jar <fichier>.jar`
 
 #### Description de notre implémentation
+Le projet est divisé en trois paquets. Le premier est le paquet mail qui contient les classes Personne, Groupe et Message. Une personne est définie par une adresseEmail et un pseudonyme qui sera déduit de l'adresse Email. Un groupe est définit par une list de personnes. Les instances de la classe Message contiennent toutes les informations d'un email, le corps du message, l'expéditeur, les gens en copies, les destinataires.
+Le deuxième paquet est le paquet config qui contient une classe GestionnaireConfiguartion qui permet simplement d'aller chercher les configuartions à utiliser dans les fichiers victimes.UTF8 (contient les adresses Email des victimes), messages.UTF8 (qui contient les blagues à envoyer par Email) et config.properties qui lui contient quel serveur mail utiliser, qui mettre en copie (les témoins de la blague, le port SMTP et le nombre de groupes à créer.
+Le paquet blague contient deux classes, GenerateurBlague qui va utiliser les configuration du GestionnaireConfiguartion pour créer une liste de groupe de victimes et une liste de blague. Ces blagues sont créées par la classe Blague qui gère les victimes et le message d'une blague en particuler.$
+Le paquet smtp contient un simple clientSmtp qui va pouvoir envoyer des messages à un serveur précis sur une port précis.
+Toutes ces classes sont liées dans l'application princpale App qui va dans l'ordre, récuperer les configuration, générer les groupes et les listes de blagues puis les envoyer.
+Voila le diagramme de classe du projet qui contient les classes et leurs attributs et méthodes principales.
 ![UML.PNG](imageRapport%2DiagrammeClasse.png)
 #### Références
